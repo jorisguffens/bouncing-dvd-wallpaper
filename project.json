@@ -1,0 +1,98 @@
+{
+	"contentrating" : "Everyone",
+	"description" : "DVD idle screen\n\nBored at work or at school? Stare endlessly and cheer when it hits the corner. Enjoy it now with smooth fps and a high quality DVD logo.\n\nHighly customizable:\n- Background color\n- Movement speed\n- Size\n- Bounce off taskbar",
+	"file" : "index.html",
+	"general" : 
+	{
+		"properties" : 
+		{
+			"scale" : 
+			{
+				"options" : 
+				[
+					{
+						"label" : "Small",
+						"value" : 1
+					},
+					{
+						"label" : "Medium",
+						"value" : 2
+					},
+					{
+						"label" : "Large",
+						"value" : 3
+					},
+					{
+						"label" : "Extra Large",
+						"value" : 4
+					}
+				],
+				"text" : "Size",
+				"type" : "combo",
+				"value" : 2
+			},
+			"schemecolor" : 
+			{
+				"order" : 0,
+				"text" : "Background color",
+				"type" : "color",
+				"value" : "0 0 0"
+			},
+			"speed" : 
+			{
+				"max" : 10,
+				"min" : 1,
+				"text" : "Speed",
+				"type" : "slider",
+				"value" : 1
+			},
+			"taskbar" : 
+			{
+				"text" : "Taskbar",
+				"type" : "bool",
+				"value" : false
+			},
+			"taskbar_position" : 
+			{
+				"condition" : "taskbar.value == true",
+				"options" : 
+				[
+					{
+						"label" : "Bottom",
+						"value" : 1
+					},
+					{
+						"label" : "Top",
+						"value" : 2
+					},
+					{
+						"label" : "Left",
+						"value" : 3
+					},
+					{
+						"label" : "Right",
+						"value" : 4
+					}
+				],
+				"text" : "Taskbar Position",
+				"type" : "combo",
+				"value" : 1
+			},
+			"taskbar_size" : 
+			{
+				"condition" : "taskbar.value == true",
+				"max" : 200,
+				"min" : 0,
+				"text" : "Taskbar Size",
+				"type" : "slider",
+				"value" : 50
+			}
+		}
+	},
+	"preview" : "preview.png",
+	"tags" : [ "Relaxing" ],
+	"title" : "DVD idle screen",
+	"type" : "web",
+	"visibility" : "public",
+	"workshopid" : "1598591301"
+}

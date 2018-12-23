@@ -1,0 +1,255 @@
+<html>
+<head>
+
+	<style>
+		html, body {
+			margin: 0;
+			padding: 0;
+		}
+		
+		#canvas {
+			width: 100%;
+			height: 100%;
+		}
+		
+		svg {
+			display: none;
+			visibility: hidden;
+		}
+		
+		#debug {
+			position: absolute;
+			display: block;
+			
+			background: #000;
+			color: #fff;
+			font-size: 20px;
+			z-index: 10000;
+			margin: 20px;
+			padding: 10px 20px;
+		}
+
+	</style>
+
+</head>
+<body>
+
+	<!--
+	<div id="debug"></div>
+	-->
+
+	<canvas id="canvas"></canvas>
+	
+	<svg xmlns="http://www.w3.org/2000/svg" id="image" viewBox="0 0 67.417 29.523"><path d="M59.646 0H43.07l-8.926 10.291L30.501 0H5.911L5 3.825h9.017c2.915 0 6.302 1.34 5.647 4.371-.729 3.37-4.19 5.01-10.474 5.01L11.011 5.1H4.727L2.04 16.758h8.516c5.601 0 13.115-1.64 15.165-7.969.551-1.702.496-3.225.11-4.508l.026-.001 5.738 16.395L46.35 3.825h9.381c2.915 0 5.618 1.33 5.01 4.371-.547 2.732-3.552 5.01-9.837 5.01L52.725 5.1H46.44l-2.687 11.658h6.968c5.601 0 14.299-1.64 16.348-7.969C68.764 3.555 63.927 0 59.646 0z"/><ellipse cx="31.686" cy="25.319" rx="31.686" ry="4.204"/><ellipse cx="48.558" cy="25.114" rx="3.671" ry="2.608" fill="#fff"/><ellipse cx="48.558" cy="25.114" rx="2.397" ry="1.516"/><path fill="#fff" d="M22.896 22.655h1.435v5.01h-1.435zM12.833 22.655h1.685l1.844 3.097 1.844-3.097h1.685l-2.983 5.01h-1.093zM30.501 22.657c2.045 0 3.703 1.156 3.703 2.525s-1.658 2.479-3.703 2.479h-1.958v-5.007l1.958.003z"/><path d="M30.501 26.563c1.245 0 2.254-.58 2.254-1.381 0-.8-1.009-1.427-2.254-1.427h-.546v2.816l.546-.008z"/><path fill="#fff" d="M41.727 22.655h-4.155v5.01h4.155v-1.093h-2.721l-.002-.986h2.722v-1.028h-2.722l.002-.81h2.721z"/></svg>
+	
+	<script type="text/javascript">
+		var canvas = document.getElementById("canvas");
+		var ctx = canvas.getContext("2d");
+	
+		var image = document.getElementById("image");
+	
+		var colorindex = 0;
+		var colors = [
+			"#BE00FF", "#FF008B", "#FF8300", "#0026FF", "#FFFA00"
+		];
+	
+		var speed = 2;
+		var background = "#000";
+		var scale = 2;
+	
+		var x = 0;
+		var y = 0;
+		var vx = 1;
+		var vy = 1;
+		
+		var W = canvas.width = canvas.offsetWidth;
+		var H = canvas.height = canvas.offsetHeight;
+		
+		var LBound = 0, RBound = W, TBound = 0, BBound = H;
+		
+		var w = scale * image.getAttribute("viewBox").split(" ")[2];
+		var h = scale * image.getAttribute("viewBox").split(" ")[3];
+
+		function animate() {
+
+			var reqAnimFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame
+                || window.msRequestAnimationFrame || window.oRequestAnimationFrame;
+			reqAnimFrame(animate);
+			
+			var bounce = false;
+			
+			for ( var i = 0; i < speed; i++ ) {
+				x += vx;
+				y += vy;
+				
+				// right
+				if ( x+w >= RBound ) {
+					vx = -vx;
+					bounce = true;
+				}
+				
+				// bottom
+				if ( y+h >= BBound ) {
+					vy = -vy;
+					bounce = true;
+				}
+				
+				// left
+				if ( x <= LBound ) {
+					vx = -vx;
+					bounce = true;
+				}
+				
+				// top
+				if ( y <= TBound ) {
+					vy = -vy;
+					bounce = true;
+				}
+			}
+			
+			if ( bounce ) {
+				nextColor();
+			}
+
+			draw();
+		}
+
+
+		function draw() {
+		
+			// clear canvas
+			ctx.clearRect(0, 0, W, H);
+			ctx.fillStyle = background;
+			ctx.fillRect(0, 0, W, H);
+			
+			ctx.save();
+
+			// draw image
+			ctx.translate(x, y);
+			ctx.scale(scale, scale);
+			
+			var color = colors[colorindex];
+			var ancestor = image, descendents = ancestor.getElementsByTagName('*');
+			
+			for (i = 0; i < descendents.length; i++) {
+				var el = descendents[i];
+				
+				if ( el.nodeName === "path" ) {
+					var path = new Path2D(el.getAttribute("d"));
+					ctx.fillStyle = el.getAttribute("fill") === "#fff" ? background : color;
+					ctx.fill(path);
+				}
+				else if ( el.nodeName === "ellipse" ) {
+					ctx.beginPath();
+					ctx.ellipse(el.getAttribute("cx"), el.getAttribute("cy"), el.getAttribute("rx"), el.getAttribute("ry"), 0, 0, Math.PI * 2);
+                    ctx.closePath();
+					ctx.fillStyle = el.getAttribute("fill") === "#fff" ? background : color;
+					ctx.fill();
+				}
+			}
+
+			ctx.restore();
+		}
+		
+		function nextColor() {
+			colorindex++;
+			if ( colorindex >= colors.length ) colorindex = 0;
+		}
+		
+		function reset() {
+			x = y = 0;
+			vx = vy = 1;
+		}
+		
+		window.onresize = function(event) {
+			W = canvas.width = canvas.offsetWidth;
+			H = canvas.height = canvas.offsetHeight;
+		};
+		
+		function componentToHex(c) {
+			var hex = c.toString(16);
+			return hex.length === 1 ? "0" + hex : hex;
+		}
+
+		function rgbToHex(r, g, b) {
+			return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+		}
+		
+		// wallpaper engine options
+		window.wallpaperPropertyListener = {
+		
+			taskbar: false,
+			taskbar_size: 50,
+			taskbar_position: 1,
+		
+			applyUserProperties: function(properties) {
+				//document.getElementById("debug").innerText = JSON.stringify(properties);
+			
+				// background
+				if ( properties.schemecolor ) {
+					var schemeColor = properties.schemecolor.value.split(' ');
+					background = rgbToHex(Math.ceil(schemeColor[0] * 255), Math.ceil(schemeColor[1] * 255), Math.ceil(schemeColor[2] * 255));
+				}
+				
+				// speed
+				if ( properties.speed ) {
+					speed = properties.speed.value;
+				}
+				
+				// size
+				if ( properties.scale ) {
+					var cw = w / scale;
+					var ch = h / scale;
+					scale = properties.scale.value;
+					w = cw * scale;
+					h = ch * scale;
+					
+					reset();
+				}
+				
+				// taskbar
+				if ( properties.taskbar ) {
+					this.taskbar = properties.taskbar.value;
+					this.calculateTaskbar();
+				}
+				
+				// taskbar size
+				if ( properties.taskbar_size ) {
+					this.taskbar_size = properties.taskbar_size.value;
+					this.calculateTaskbar();
+				}
+				
+				// taskbar position
+				if ( properties.taskbar_position ) {
+					this.taskbar_position = properties.taskbar_position.value;
+					this.calculateTaskbar();
+				}
+			},
+			
+			calculateTaskbar: function() {
+				LBound = 0, RBound = W, TBound = 0, BBound = H;
+				reset();
+				
+				if ( !this.taskbar ) return;
+				if ( !this.taskbar_position || !this.taskbar_size ) return;
+				
+				if ( this.taskbar_position === 1 ) { // bottom
+					BBound = H - this.taskbar_size;
+				}
+				else if ( this.taskbar_position === 2 ) { // top
+					TBound = this.taskbar_size;
+				}
+				else if ( this.taskbar_position === 3 ) { // left
+					LBound = this.taskbar_size;
+				}
+				else if ( this.taskbar_position === 4 ) { // right
+					RBound = W - this.taskbar_size;
+				}
+			}
+			
+		};
+
+		animate();
+	</script>
+</body>
+</html>
