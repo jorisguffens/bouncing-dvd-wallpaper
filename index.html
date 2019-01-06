@@ -76,8 +76,6 @@
                 || window.msRequestAnimationFrame || window.oRequestAnimationFrame;
 			reqAnimFrame(animate);
 			
-			var bounce = false;
-			
 			for ( var i = 0; i < speed; i++ ) {
 				x += vx;
 				y += vy;
@@ -85,30 +83,30 @@
 				// right
 				if ( x+w >= RBound ) {
 					vx = -vx;
-					bounce = true;
+                    nextColor();
+                    break;
 				}
 				
 				// bottom
 				if ( y+h >= BBound ) {
 					vy = -vy;
-					bounce = true;
+                    nextColor();
+                    break;
 				}
 				
 				// left
 				if ( x <= LBound ) {
 					vx = -vx;
-					bounce = true;
+                    nextColor();
+                    break;
 				}
 				
 				// top
 				if ( y <= TBound ) {
 					vy = -vy;
-					bounce = true;
+                    nextColor();
+                    break;
 				}
-			}
-			
-			if ( bounce ) {
-				nextColor();
 			}
 
 			draw();
@@ -157,7 +155,8 @@
 		}
 		
 		function reset() {
-			x = y = 0;
+			x = LBound;
+			y = TBound;
 			vx = vy = 1;
 		}
 		
