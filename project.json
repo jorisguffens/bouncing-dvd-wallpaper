@@ -1,13 +1,40 @@
 {
+	"approved" : true,
 	"contentrating" : "Everyone",
-	"description" : "DVD idle screen\n\nBored at work or at school? Stare endlessly and cheer when it hits the corner. Enjoy it now with smooth fps and a high quality DVD logo.\n\nHighly customizable:\n- Background color\n- Movement speed\n- Size\n- Bounce off taskbar",
+	"description" : "DVD idle screen\r\n\r\nBored at work or at school? Stare endlessly and cheer when it hits the corner. Enjoy it now with smooth fps and a high quality DVD logo.\r\n\r\nHighly customizable:\r\n- Background color\r\n- Background image\r\n- Movement speed\r\n- Size\r\n- Bounce off taskbar\r\n- Logo color",
 	"file" : "index.html",
 	"general" : 
 	{
 		"properties" : 
 		{
+			"background_image" : 
+			{
+				"index" : 0,
+				"order" : 100,
+				"text" : "Background Image",
+				"type" : "file",
+				"value" : ""
+			},
+			"change_colors" : 
+			{
+				"index" : 6,
+				"order" : 106,
+				"text" : "Change Colors",
+				"type" : "bool",
+				"value" : true
+			},
+			"logo_color" : 
+			{
+				"condition" : "change_colors.value == false",
+				"index" : 7,
+				"order" : 107,
+				"text" : "Static Color",
+				"type" : "color",
+				"value" : "1 0 0"
+			},
 			"scale" : 
 			{
+				"index" : 1,
 				"options" : 
 				[
 					{
@@ -27,6 +54,7 @@
 						"value" : 4
 					}
 				],
+				"order" : 101,
 				"text" : "Size",
 				"type" : "combo",
 				"value" : 2
@@ -40,21 +68,26 @@
 			},
 			"speed" : 
 			{
-				"max" : 10,
+				"index" : 2,
+				"max" : 20,
 				"min" : 1,
+				"order" : 102,
 				"text" : "Speed",
 				"type" : "slider",
-				"value" : 1
+				"value" : 3
 			},
 			"taskbar" : 
 			{
+				"index" : 3,
+				"order" : 103,
 				"text" : "Taskbar",
 				"type" : "bool",
-				"value" : false
+				"value" : true
 			},
 			"taskbar_position" : 
 			{
 				"condition" : "taskbar.value == true",
+				"index" : 4,
 				"options" : 
 				[
 					{
@@ -74,6 +107,7 @@
 						"value" : 4
 					}
 				],
+				"order" : 104,
 				"text" : "Taskbar Position",
 				"type" : "combo",
 				"value" : 1
@@ -81,18 +115,22 @@
 			"taskbar_size" : 
 			{
 				"condition" : "taskbar.value == true",
+				"index" : 5,
 				"max" : 200,
 				"min" : 0,
+				"order" : 105,
 				"text" : "Taskbar Size",
 				"type" : "slider",
 				"value" : 50
 			}
 		}
 	},
-	"preview" : "preview.png",
+	"preview" : "preview.gif",
 	"tags" : [ "Relaxing" ],
-	"title" : "DVD idle screen",
+	"title" : "DVD Screen [High Quality] [Customizable]",
 	"type" : "web",
+	"version" : 1,
 	"visibility" : "public",
-	"workshopid" : "1598591301"
+	"workshopid" : "1598591301",
+	"workshopurl" : "steam://url/CommunityFilePage/1598591301"
 }
